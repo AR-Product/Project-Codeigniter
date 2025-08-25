@@ -80,8 +80,13 @@
 <?php endif; ?>
 
   <form action="<?= base_url('register/process') ?>" method="post">
-    <input type="text" name="username" placeholder="Username" required>
-    <input type="email" name="email" placeholder="Email" required>
+  <input type="text" name="username" placeholder="Username" required>
+  <input type="text" name="nama" placeholder="Nama Lengkap" required> <!-- Tambahan -->
+  <input type="email" name="email" placeholder="Email" required>
+  <input type="password" name="password" placeholder="Password" required>
+
+
+
     <input type="password" name="password" placeholder="Password" required>
     
     <select name="role" required>

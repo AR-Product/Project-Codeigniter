@@ -3,44 +3,65 @@
 <?= $this->section('content'); ?>
 
 <div class="container mt-5">
-    <h2 class="mb-4 text-center">Konsultasi Dokter Hewan</h2>
+    <h2 class="mb-4">Konsultasi Dokter Hewan</h2>
 
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title mb-4">Tanyakan Masalah Hewan Anda!</h5>
-
-                    <form action="<?= base_url('pelanggan/konsultasi/kirim') ?>" method="post">
-                        <div class="mb-3">
-                            <label for="subjek" class="form-label">Subjek Konsultasi</label>
-                            <input type="text" class="form-control" id="subjek" name="subjek" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="pesan" class="form-label">Pesan</label>
-                            <textarea class="form-control" id="pesan" name="pesan" rows="5" required></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-warning">Kirim Pertanyaan</button>
-                    </form>
-
-                </div>
+    <!-- Form Konsultasi -->
+    <div class="card mb-4 p-3">
+        <form action="<?= base_url('pelanggan/konsultasi/kirim') ?>" method="post">
+            
+            <div class="mb-3">
+                <label for="subjek" class="form-label">Subjek Konsultasi</label>
+                <input type="text" class="form-control" id="subjek" name="subjek" required>
             </div>
-        </div>
+            <div class="mb-3">
+                <label for="pesan" class="form-label">Pesan</label>
+                <textarea class="form-control" id="pesan" name="pesan" rows="4" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-warning">Kirim Pertanyaan</button>
+        </form>
     </div>
 
-    <!-- Daftar Konsultasi Sebelumnya (opsional) -->
-    <div class="mt-5">
-        <h4>Riwayat Konsultasi</h4>
-        <ul class="list-group">
-            <li class="list-group-item">
-                <strong>Kesehatan Kucing</strong> - Belum dibalas
-            </li>
-            <li class="list-group-item">
-                <strong>Vaksinasi Anjing</strong> - Dijawab oleh drh. Budi
-            </li>
-        </ul>
-    </div>
+    <h3>Riwayat Konsultasi Anda</h3>
 
+    <?php if (session()->getFlashdata('success')) : ?>
+        <p style="color:green"><?= session()->getFlashdata('success') ?></p>
+    <?php endif; ?>
+
+    <?php if (!empty($riwayat)) : ?>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Tanggal</th>
+                    <th>Nama Pasien</th>
+                    <th>Subjek</th>
+                    <th>Keluhan</th>
+                    <th>Status</th>
+                    <th>Diagnosa Dokter</th>
+                    <th>Resep / Saran</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($riwayat as $row): ?>
+                <tr>
+                    <td><?= esc($row['tanggal']) ?></td>
+                    <td><?= esc($row['nama_pasien'] ?? '-') ?></td>
+
+                    <td><?= esc($row['subjek']) ?></td>
+                    <td><?= esc($row['keluhan']) ?></td>
+                    <td>
+                        <span class="badge bg-<?= $row['status'] == 'Menunggu' ? 'warning' : 'success' ?>">
+                            <?= esc($row['status']) ?>
+                        </span>
+                    </td>
+                    <td><?= esc($row['diagnosa'] ?? '-') ?></td>
+                    <td><?= esc($row['resep'] ?? '-') ?></td>
+                </tr>
+                <?php endforeach ?>
+            </tbody>
+        </table>
+    <?php else : ?>
+        <div class="alert alert-info">Belum ada riwayat konsultasi.</div>
+    <?php endif; ?>
 </div>
 
 <?= $this->endSection(); ?>

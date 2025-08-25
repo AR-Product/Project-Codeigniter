@@ -12,21 +12,20 @@
             <div class="card">
                 <div class="card-header">Update Profil</div>
                 <div class="card-body">
-                    <form action="<?= base_url('/pelanggan/updateProfil') ?>" method="post">
-                        <div class="form-group mb-3">
-                            <label>Nama</label>
-                            <input type="text" name="nama" class="form-control" value="<?= session()->get('nama'); ?>">
-                        </div>
-                        <div class="form-group mb-3">
-                            <label>Email</label>
-                            <input type="email" name="email" class="form-control" value="<?= session()->get('email'); ?>">
-                        </div>
-                        <div class="form-group mb-3">
-                            <label>Telepon</label>
-                            <input type="text" name="telepon" class="form-control" value="<?= session()->get('telepon'); ?>">
-                        </div>
-                        <button type="submit" class="btn btn-primary">Simpan Profil</button>
-                    </form>
+                    <form action="/pelanggan/updateProfil" method="post">
+    <div class="form-group">
+        <label>Nama</label>
+       <input type="text" name="username" value="<?= esc($user['username'] ?? '') ?>" class="form-control">
+
+    </div>
+    <div class="form-group">
+        <label>Email</label>
+        <input type="email" name="email" value="<?= esc($user['email'] ?? '') ?>" class="form-control">
+
+    </div>
+    <button type="submit" class="btn btn-primary mt-2">Simpan Profil</button>
+</form>
+
                 </div>
             </div>
         </div>

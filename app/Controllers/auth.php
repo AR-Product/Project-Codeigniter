@@ -7,6 +7,7 @@ class Auth extends BaseController
 {
     public function login()
     {
+        
         return view('auth/login');
     }
 
@@ -51,39 +52,49 @@ class Auth extends BaseController
     }
 
     public function registerProcess()
-    {
-        $model = new UserModel();
+{
+    // tampilkan semua input
 
-        $username = $this->request->getPost('username');
-        $email    = $this->request->getPost('email');
-        $password = $this->request->getPost('password');
-        $role     = $this->request->getPost('role');
+    $model = new UserModel();
 
-        // Cek apakah username sudah ada
-        if ($model->where('username', $username)->first()) {
-            return redirect()->back()->with('error', 'Username sudah digunakan!');
-        }
+    $username = $this->request->getPost('username');
+    $email    = $this->request->getPost('email');
+    $password = $this->request->getPost('password');
+    $role     = $this->request->getPost('role');
 
-        // Cek apakah email sudah ada
-        if ($model->where('email', $email)->first()) {
-            return redirect()->back()->with('error', 'Email sudah digunakan!');
-        }
-
-        // Optional: Cek apakah password sudah sama dengan yang lain (biasanya ini tidak wajib)
-        // Jika mau, perlu cara khusus karena password disimpan dalam hash.
-
-        // Jika semua aman, simpan ke database
-        $data = [
-            'username' => $username,
-            'email'    => $email,
-            'password' => password_hash($password, PASSWORD_DEFAULT),
-            'role'     => $role,
-        ];
-        
-        $model->save($data);
-
-        return redirect()->to('/login')->with('success', 'Berhasil daftar, silakan login!');
+    // Validasi input kosong
+    if (empty($username) || empty($email) || empty($password) || empty($role)) {
+        return redirect()->back()->with('error', 'Semua field wajib diisi!')->withInput();
     }
+
+    // Validasi format email
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        return redirect()->back()->with('error', 'Format email tidak valid!')->withInput();
+    }
+
+    // Cek apakah username sudah ada
+    if ($model->where('username', $username)->first()) {
+        return redirect()->back()->with('error', 'Username sudah digunakan!')->withInput();
+    }
+
+    // Cek apakah email sudah ada
+    if ($model->where('email', $email)->first()) {
+        return redirect()->back()->with('error', 'Email sudah digunakan!')->withInput();
+    }
+
+    // Simpan ke database
+    $data = [
+        'username' => $username,
+        'email'    => $email,
+        'password' => password_hash($password, PASSWORD_DEFAULT),
+        'role'     => $role,
+    ];
+
+    $model->save($data);
+
+    return redirect()->to('/login')->with('success', 'Berhasil daftar, silakan login!');
+}
+
 
     public function logout()
     {

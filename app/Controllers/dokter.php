@@ -6,35 +6,100 @@ use App\Models\JadwalModel;
 
 class Dokter extends BaseController
 {
-    public function index()
-    {
-        $pasienModel = new PasienModel();
-        $konsultasiModel = new KonsultasiModel();
-        $jadwalModel = new JadwalModel();
+    // Dalam Controller/Dokter.php - method index()
+public function index()
+{
+    $pasienModel = new PasienModel();
+    $konsultasiModel = new KonsultasiModel();
+    $jadwalModel = new JadwalModel();
 
-        $total_pasien = $pasienModel->countAll();
-        $jumlah_konsultasi = $konsultasiModel->countAll();
-        $jadwal_hari_ini = $jadwalModel
-            ->where('tanggal', date('Y-m-d'))
-            ->countAllResults();
+    $total_pasien = $pasienModel->countAll();
+    $jumlah_konsultasi = $konsultasiModel->countAll();
+    $belum_ditangani = $konsultasiModel->where('status', 'Pending')->orWhere('status', NULL)->countAllResults();
+    $jadwal_hari_ini = $jadwalModel
+        ->where('tanggal', date('Y-m-d'))
+        ->countAllResults();
 
-        return view('dokter/index', [
-            'total_pasien' => $total_pasien,
-            'jumlah_konsultasi' => $jumlah_konsultasi,
-            'jadwal_hari_ini' => $jadwal_hari_ini
-        ]);
-    }
+    // Ambil data konsultasi terbaru langsung dari tabel konsultasi
+    $konsultasi_terbaru = $konsultasiModel
+        ->select('id, nama_pasien, keluhan, tanggal, status')
+        ->orderBy('tanggal', 'DESC')
+        ->limit(5)
+        ->findAll();
+
+    return view('dokter/index', [
+        'total_pasien' => $total_pasien,
+        'jumlah_konsultasi' => $jumlah_konsultasi,
+        'belum_ditangani' => $belum_ditangani,
+        'jadwal_hari_ini' => $jadwal_hari_ini,
+        'konsultasi_terbaru' => $konsultasi_terbaru
+    ]);
+}
 
     public function __construct()
 {
     $this->konsultasiModel = new \App\Models\KonsultasiModel();
 }
 
-    public function konsultasi()
-    {
-        return view('dokter/konsultasi'); // Buat view-nya di /app/Views/dokter/konsultasi.php
-    }
-    
+public function konsultasi()
+{
+    $konsultasiModel = new KonsultasiModel();
+    $data['konsultasi'] = $konsultasiModel
+        ->select('id, nama_pasien, keluhan, tanggal, status')
+        ->orderBy('tanggal', 'DESC')
+        ->findAll();
+
+    return view('dokter/konsultasi', $data);
+}
+public function balas($id)
+{
+    $model = new \App\Models\KonsultasiModel();
+    $data['konsultasi'] = $model->find($id);
+    return view('dokter/balas_konsultasi', $data);
+}
+
+public function simpanBalasan($id)
+{
+    $model = new \App\Models\KonsultasiModel();
+    $data = [
+        'diagnosa' => $this->request->getPost('diagnosa'),
+        'resep'    => $this->request->getPost('resep'),
+        'status'   => $this->request->getPost('status'),
+    ];
+    $model->update($id, $data);
+    return redirect()->to('/dokter/konsultasi')->with('success', 'Balasan berhasil dikirim.');
+}
+
+public function tanggapiKonsultasi($id)
+{
+$model = new \App\Models\KonsultasiModel();
+$konsultasi = $model->find($id);
+if (!$konsultasi) {
+    return redirect()->to('/dokter/riwayat_konsultasi')->with('error', 'Konsultasi tidak ditemukan');
+}
+
+return view('dokter/tanggapi_konsultasi', ['konsultasi' => $konsultasi]);
+}
+
+public function simpanTanggapan($id)
+{
+$model = new \App\Models\KonsultasiModel();
+$konsultasi = $model->find($id);
+if (!$konsultasi) {
+    return redirect()->to('/dokter/riwayat_konsultasi')->with('error', 'Konsultasi tidak ditemukan');
+}
+
+$data = [
+    'diagnosa' => $this->request->getPost('diagnosa'),
+    'resep'    => $this->request->getPost('resep'),
+    'status'   => $this->request->getPost('status'),
+    'updated_at' => date('Y-m-d H:i:s')
+];
+
+$model->update($id, $data);
+
+return redirect()->to('/dokter/riwayat_konsultasi')->with('success', 'Tanggapan berhasil disimpan');
+}
 
     public function profil()
     {
@@ -76,11 +141,19 @@ class Dokter extends BaseController
 
 
     public function riwayat_konsultasi()
-    {
-        $data['konsultasi'] = $this->konsultasiModel->findAll();
-        $data['title'] = 'Riwayat Konsultasi';
-        return view('dokter/riwayat_konsultasi', $data);
-    }
+{
+    $pasienModel = new PasienModel();
+    $jadwalModel = new JadwalModel();
+
+    $data['konsultasi'] = $this->konsultasiModel->findAll();
+    $data['total_pasien'] = $pasienModel->countAll();
+    $data['jumlah_konsultasi'] = $this->konsultasiModel->countAll();
+    $data['jadwal_hari_ini'] = $jadwalModel->where('tanggal', date('Y-m-d'))->countAllResults();
+    $data['title'] = 'Riwayat Konsultasi';
+
+    return view('dokter/riwayat_konsultasi', $data);
+}
+
     
     public function edit($id)
     {
