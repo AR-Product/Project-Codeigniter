@@ -133,8 +133,3 @@ composer.json   -> Dependency manager
 ## 📜 Lisensi
 
 MIT License – bebas digunakan, dimodifikasi, dan didistribusikan dengan mencantumkan kredit.
-
----
-
-👉 README ini sudah cukup standar untuk project open-source.
-Mau aku bikinin juga **versi singkat untuk repo publik (cukup 1 halaman)** atau lebih detail (pakai contoh query SQL untuk import database)?
