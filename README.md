@@ -33,11 +33,11 @@ Proyek ini dikembangkan untuk membantu admin maupun pelanggan dalam mengakses in
 
 ### Admin Dashboard
 
-![Admin Dashboard](docs/screenshots/admin-dashboard.png)
+![Admin Dashboard](docs/screenshots/dashboard.png)
 
 ### Halaman Utama Pelanggan
 
-![Landing Page](docs/screenshots/landing-page.png)
+![Landing Page](docs/screenshots/landing.png)
 
 > (Note: tambahkan folder `docs/screenshots/` di repo GitHub kamu, simpan screenshot yang tadi biar tampil di README)
 
