@@ -1,68 +1,140 @@
-# CodeIgniter 4 Application Starter
+# 🐾 Petshop Management System (CodeIgniter 4)
 
-## What is CodeIgniter?
+## 📖 Deskripsi
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](https://codeigniter.com).
+Aplikasi ini adalah sistem manajemen petshop berbasis **CodeIgniter 4** yang menyediakan fitur untuk **kelola produk, layanan, konsultasi, pesanan, dan pengguna**.
+Proyek ini dikembangkan untuk membantu admin maupun pelanggan dalam mengakses informasi petshop secara efisien melalui antarmuka web yang modern dan responsif.
 
-This repository holds a composer-installable app starter.
-It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
+---
 
-More information about the plans for version 4 can be found in [CodeIgniter 4](https://forum.codeigniter.com/forumdisplay.php?fid=28) on the forums.
+## ✨ Fitur Utama
 
-You can read the [user guide](https://codeigniter.com/user_guide/)
-corresponding to the latest version of the framework.
+### 👩‍💻 Untuk Admin
 
-## Installation & updates
+* **Dashboard** ringkasan data (produk, layanan, konsultasi, pesanan, pengguna).
+* Kelola Produk (CRUD).
+* Kelola Layanan.
+* Manajemen Konsultasi pelanggan.
+* Kelola Pesanan.
+* Manajemen Pengguna.
 
-`composer create-project codeigniter4/appstarter` then `composer update` whenever
-there is a new release of the framework.
+### 🐶 Untuk Pelanggan
 
-When updating, check the release notes to see if there are any changes you might need to apply
-to your `app` folder. The affected files can be copied or merged from
-`vendor/codeigniter4/framework/app`.
+* Registrasi & Login.
+* Lihat daftar produk.
+* Lihat layanan petshop.
+* Konsultasi dengan dokter hewan.
+* Pesan produk/layanan.
+* Manajemen akun & keranjang belanja.
 
-## Setup
+---
 
-Copy `env` to `.env` and tailor for your app, specifically the baseURL
-and any database settings.
+## 📸 Tampilan Aplikasi
 
-## Important Change with index.php
+### Admin Dashboard
 
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
+![Admin Dashboard](docs/screenshots/admin-dashboard.png)
 
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
+### Halaman Utama Pelanggan
 
-**Please** read the user guide for a better explanation of how CI4 works!
+![Landing Page](docs/screenshots/landing-page.png)
 
-## Repository Management
+> (Note: tambahkan folder `docs/screenshots/` di repo GitHub kamu, simpan screenshot yang tadi biar tampil di README)
 
-We use GitHub issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
+---
 
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
+## 🛠️ Teknologi yang Digunakan
 
-## Server Requirements
+* [CodeIgniter 4](https://codeigniter.com/)
+* PHP 7.4+
+* MySQL/MariaDB
+* Bootstrap 5 / CSS custom
+* Font Awesome & Icon Pack
 
-PHP version 8.1 or higher is required, with the following extensions installed:
+---
 
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
+## ⚙️ Instalasi & Setup
 
-> [!WARNING]
-> - The end of life date for PHP 7.4 was November 28, 2022.
-> - The end of life date for PHP 8.0 was November 26, 2023.
-> - If you are still using PHP 7.4 or 8.0, you should upgrade immediately.
-> - The end of life date for PHP 8.1 will be December 31, 2025.
+### 1. Clone Repository
 
-Additionally, make sure that the following extensions are enabled in your PHP:
+```bash
+git clone https://github.com/<username>/petshop-kelompok-4.git
+cd petshop-kelompok-4
+```
 
-- json (enabled by default - don't turn it off)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
+### 2. Install Dependencies
+
+Pastikan **Composer** sudah terinstall. Jalankan:
+
+```bash
+composer install
+```
+
+### 3. Konfigurasi Environment
+
+Salin file `.env.example` menjadi `.env`:
+
+```bash
+cp env .env
+```
+
+Edit `.env` sesuai konfigurasi lokal:
+
+```ini
+app.baseURL = 'http://localhost:8080/'
+
+database.default.hostname = localhost
+database.default.database = petshop
+database.default.username = root
+database.default.password = 
+database.default.DBDriver = MySQLi
+```
+
+### 4. Migrasi Database
+
+Jalankan migrasi & seeding data:
+
+```bash
+php spark migrate
+php spark db:seed DatabaseSeeder
+```
+
+### 5. Jalankan Server Development
+
+```bash
+php spark serve
+```
+
+Akses aplikasi di:
+➡️ `http://localhost:8080/`
+
+---
+
+## 📂 Struktur Folder Penting
+
+```
+app/            -> Source code utama
+public/         -> Root folder untuk akses web
+writable/       -> Cache, logs, session, uploads
+.env            -> Konfigurasi environment
+composer.json   -> Dependency manager
+```
+
+---
+
+## 👥 Kontributor
+
+* Ari Rahmat
+* Farid2-art
+* Tim Kelompok 4
+
+---
+
+## 📜 Lisensi
+
+MIT License – bebas digunakan, dimodifikasi, dan didistribusikan dengan mencantumkan kredit.
+
+---
+
+👉 README ini sudah cukup standar untuk project open-source.
+Mau aku bikinin juga **versi singkat untuk repo publik (cukup 1 halaman)** atau lebih detail (pakai contoh query SQL untuk import database)?
